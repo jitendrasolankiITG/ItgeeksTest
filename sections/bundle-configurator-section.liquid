@@ -1,0 +1,171 @@
+<div class="bundle-configurator-section">
+  <div class="page-width">
+    <div class="bundle-configurator-content">
+      <div class="bundle_products">
+        {% for block in section.blocks %}
+         
+              <div data-value="{{ forloop.index }}" class="step__{{ forloop.index }} step-data {% if forloop.first %}step__used step__active{% endif %}">
+                <div class="product-data">
+                  {% if block.settings.steps_product != blank %}
+                  {% assign product_list = block.settings.steps_product %}
+                    {% else %}
+                   {% assign product_list = block.settings.collection.products %}
+                  {% endif %}
+                  
+                  {% for product_item in product_list limit : block.settings.product_limit %}
+                    {% assign product_qty = product_item.first_available_variant.inventory_quantity %}
+                   
+                      <div
+                        class="product-item"
+                        id="{{ product_item.id }}"
+                        variant-id="{{ product_item.first_available_variant.id }}"
+                      >
+                        <div class="product-images" data-src="{{ product_item.featured_image | img_url : '200x200'  }}">
+                          <img
+                            src="{{ product_item.featured_image | img_url : '200x200'  }}"
+                            alt="{{ product_item.title }}"
+                          >
+                        </div>
+                        <div class="product-info">
+                          <h4 class="p_title" data-title="{{ product_item.title }}">{{ product_item.title }}</h4>
+                          <p>
+                            <span
+                              class="p_price"
+                              data-curr="{{ product_item.first_available_variant.price | money_without_currency }}"
+                              data-money="{{ product_item.first_available_variant.price | money }}"
+                            >
+                              {{- product_item.first_available_variant.price | money -}}
+                            </span>
+                            {% if product_item.compare_at_price != blank %}
+                              <span class="c_price">{{ product_item.compare_at_price | money }}</span>
+                            {% endif %}
+                          </p>
+
+                          <div class="prduct-btns">
+                            <p class="add_btn">Add</p>
+                            <div class="qty_box" style="display:none">
+                              <div class="qty-input">
+                                <button class="qty-count qty-count--minus" data-action="minus" type="button">-</button>
+                                <input
+                                  class="product-qty"
+                                  type="number"
+                                  name="product-qty"
+                                  min="1"
+                                  max="{{ product_qty }}"
+                                  value="1"
+                                >
+                                <button class="qty-count qty-count--add" data-action="add" type="button">+</button>
+                              </div>
+                              <p class="add_text">Product Added</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  
+                  {% endfor %}
+                </div>
+              </div>
+
+          
+                 
+           
+         
+        {% endfor %}
+      </div>
+      <div class="bundle_add_main">
+        <div class="pro-sticky">
+          <div class="bundle_add_content">
+            <div class="product_add_item_main"></div>
+            <div class="bundle-bottom-content" data-discount="{{ section.settings.discount_value }}">
+              <div class="bundle_price product_bundle_price_item">
+                <span> <strong>Bundle Price:</strong> </span> <span class="product_bundle_price">$00.00</span>
+              </div>
+              <div class="discount_value">
+                <p>Discount: {{ section.settings.discount_value }} % OFF</p>
+              </div>
+              <div class="bundle_price discount_bundle_price_item">
+                <span> <strong> Total Price: </strong></span> <span class="discount_bundle_price">$00.00</span>
+              </div>
+              <div class="main_add_to_cart_btn">
+                <button type="button" class="button bundle__add" disabled>Add to cart</button>
+                <p class="bundle_reset">Reset</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom_grid">
+  <div class="sticky-grid">
+    {% for block in section.blocks %}
+ 
+          <div data-number="{{ forloop.index }}" class="steps_{{ forloop.index }} step-contents {% if forloop.first %}step__used_bottom active_step{% endif %}">
+            <p class="step_number">{{ forloop.index }}</p>
+            <p>{{ block.settings.first_step_text }}</p>
+          </div>
+
+    {% endfor %}
+  
+  </div>
+    <div class="step_btn">
+      <button class="button btn-prev" disabled>Previous</button>
+      <button class="button btn-next" disabled>Next</button>
+    </div>
+  </div>
+</div>
+
+<div class="bundle_overlay">
+  <div id="overlay">
+    <div class="cv-spinner">
+      <span class="spinner"></span>
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Bundle Configurator",
+  "settings": [
+        {
+          "type": "text",
+          "id" : "discount_value",
+          "label": "Discount Value",
+          "default" : "5"
+        }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name" : "Step",
+      "settings": [
+        {
+          "type": "text",
+          "id" : "first_step_text",
+          "label": "Step Text"
+        },
+         {
+          "type": "product_list",
+          "id" : "steps_product",
+          "label": "Choose Products"
+        },
+        {
+          "type": "collection",
+          "id" : "collection",
+          "label": "Choose Collection"
+        },
+        {
+          "type": "text",
+          "id" : "product_limit",
+          "label": "Product Limit",
+          "default" : "10"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+    "name" : "Bundle Configurator"
+    }
+  ]
+}
+{% endschema %}

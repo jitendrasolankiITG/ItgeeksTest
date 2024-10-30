@@ -1,0 +1,26 @@
+{%- if settings.video_url != blank -%}
+  <div class="video_popup">
+    <div class="video_pop_content">
+      <span class="video_popup_close">{% render 'icon-close' %}</span>
+      {% assign video_desktop = settings.video_url.sources | where: 'format', 'mp4' | first %}
+
+      <video
+        playsinline="playsinline"
+        loading="lazy"
+        autoplay="autoplay"
+        loop="loop"
+        muted="muted"
+        width="100%"
+        preload="auto"
+        {% if settings.poster != blank %}
+          poster="{{ settings.poster | img_url : 'master' }}"
+        {% endif %}
+      >
+        <source src="{{ video_desktop.url }}" type="video/mp4">
+      </video>
+      {% if settings.popup_text != blank %}
+        <h3>{{ settings.popup_text }}</h3>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}

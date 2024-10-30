@@ -1,0 +1,125 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.40 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.40 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="custom_multicolumn_section color-{{ section.settings.color_scheme }}">
+  <div class="section-{{ section.id }}-padding">
+    <div class="custom_multicolumn_content">
+      {% for block in section.blocks %}
+        <div class="custom_multicolumn_item">
+          {% if block.settings.image != blank %}
+            <img
+              class=" {% if block.settings.mobile_image != blank %}desktop_item{% endif %}"
+              src="{{ block.settings.image | img_url : 'master' }}"
+              alt="{{ block.settings.title }}"
+            >
+          {% endif %}
+          {% if block.settings.mobile_image != blank %}
+            <img
+              class="mobile_item"
+              src="{{ block.settings.mobile_image | img_url : 'master' }}"
+              alt="{{ block.settings.mobile_image.alt  }}"
+            >
+          {% endif %}
+          <div class="multicolumn_item">
+            <p>{{ block.settings.text }}</p>
+            <h2 class="h1">{{ block.settings.title }}</h2>
+            <a href="{{ block.settings.link }}">{{ block.settings.link_label }}</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Custom Multicolumn",
+  "class": "section",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "column",
+      "name": "t:sections.multicolumn.blocks.column.name",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.multicolumn.blocks.column.settings.image.label"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile Image"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "title",
+          "label": "t:sections.multicolumn.blocks.column.settings.title.label"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "t:sections.multicolumn.blocks.column.settings.text.label"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "t:sections.multicolumn.blocks.column.settings.link_label.label"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.multicolumn.blocks.column.settings.link.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Multicolumn Section"
+    }
+  ]
+}
+{% endschema %}

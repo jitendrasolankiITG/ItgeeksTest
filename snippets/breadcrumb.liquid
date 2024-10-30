@@ -1,0 +1,44 @@
+{%- assign new_page_title = page_title -%}
+<ul class="breadcrumb breadcrumb-lg w-100 pt-2 pb-2">
+  <li>
+    <a href="{{ routes.root_url }}">
+      {{ 'general.breadcrumbs.homepage' | t }}
+    </a>
+  </li>
+  {%- case template.name -%}
+  {%- when 'article' -%}
+  <li>
+    <a href="{{ blog.url }}">
+      {{ blog.title }}
+    </a>
+  </li>
+  <li>
+    <a href="{{ article.url }}">
+      {{ article.title }}
+    </a>
+    {%- assign new_page_title = article.title -%}
+  </li>
+  {%- when 'collection' -%}
+  <li>
+    <a href="{{ shop.url }}/collections">
+      {{ 'general.breadcrumbs.collections' | t }}
+    </a>
+    {%- assign new_page_title = collection.title -%}
+  </li>
+  {%- when 'product' -%}
+  <li>
+    <a href="{{ shop.url }}/collections/vendors?q={{ product.vendor | url_escape }}">
+		{{ product.vendor }}
+    </a>
+    {%- assign new_page_title = product.title -%}
+  </li>
+  {%- endcase -%}
+  {%- unless template.name == 'article' -%}
+  <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+    <a itemprop="item" href="{{ canonical_url }}">
+      <span itemprop="name">{{ new_page_title }}</span>
+    </a>
+    <meta itemprop="position" content="{{ next_index }}" />
+  </li>
+  {%- endunless -%}
+</ul>

@@ -1,0 +1,191 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.40 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.40 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 751px) and (max-width: 991px){
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top | times: 0.65 | round: 0  }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.65 | round: 0 }}px;
+    }
+  }
+  @media screen and (min-width: 991px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+<div class="image-with-collection-section section-{{ section.id }}-padding">
+  <div class="page-width">
+    <div class="image-with-collection-header">
+      {%- if section.settings.title != blank -%}
+        <h2 class="{{ section.settings.heading_size }}">
+          {{ section.settings.title }}
+        </h2>
+      {%- endif -%}
+      <a href="{{ section.settings.link }}">{{ section.settings.link_text }}</a>
+    </div>
+    <div class="image-with-collection-content">
+      <div class="left_side_image">
+      <div>
+        {% if section.settings.banner != blank %}
+          <img src="{{ section.settings.banner | img_url : 'master' }}" alt="{{ section.settings.image_heading }}">
+        {% endif %}
+        <div class="left_side_image_content">
+          <p>{{ section.settings.pre_text }}</p>
+          <h2 class="{{ section.settings.heading_size }}">{{ section.settings.image_heading }}</h2>
+          <a href="{{ section.settings.imglink }}">{{ section.settings.imglink_text }}</a>
+        </div>
+      </div>
+      </div>
+      <div class="right_side_collection">
+        {% for block in section.blocks %}
+          {% assign collection = block.settings.collection %}
+          <div class="collection_item">
+            <a href="{{ collection.url }}">
+            {% if block.settings.coll_image != blank %}
+              <img src="{{ block.settings.coll_image | img_url : 'master' }}" alt="{{ collection.title }}">
+            {% endif %}
+            {% if block.settings.coll_title != blank %}
+             <h3>  {{ block.settings.coll_title }} </h3>
+            {% else %}
+              <h3>{{ collection.title }}</h3>
+            {% endif %}
+            <p class="count">{{ collection.all_products_count }} items </p>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Image With Collection",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "t:sections.featured-collection.settings.title.label"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "t:sections.all.heading_size.options__1.label"
+        },
+        {
+          "value": "h1",
+          "label": "t:sections.all.heading_size.options__2.label"
+        },
+        {
+          "value": "h0",
+          "label": "t:sections.all.heading_size.options__3.label"
+        },
+        {
+          "value": "hxl",
+          "label": "t:sections.all.heading_size.options__4.label"
+        },
+        {
+          "value": "hxxl",
+          "label": "t:sections.all.heading_size.options__5.label"
+        }
+      ],
+      "default": "h1",
+      "label": "t:sections.all.heading_size.label"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Button Url"
+    },
+    {
+      "type": "text",
+      "id": "link_text",
+      "label": "Button Url"
+    },
+    {
+      "type": "header",
+      "content": "Left Side Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "banner",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "pre_text",
+      "label": "Pre Text"
+    },
+    {
+      "type": "text",
+      "id": "image_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "url",
+      "id": "imglink",
+      "label": "Button Url"
+    },
+    {
+      "type": "text",
+      "id": "imglink_text",
+      "label": "Button Text"
+    },
+        {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collections",
+      "name": "Collections",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "coll_image",
+          "label": "Image"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "coll_title",
+          "label": "Custom Collection"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image With Collection"
+    }
+  ]
+}
+{% endschema %}

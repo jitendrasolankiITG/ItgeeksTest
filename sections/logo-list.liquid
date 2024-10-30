@@ -1,0 +1,52 @@
+<div class="logo-list-section scroller tickerwrapper" data-speed="fast">
+  <div class="logo-list-content tag-list scroller__inner list">
+    {% for block in section.blocks %}
+      <div class="logo-item listitem">
+        {% if block.settings.link %}
+          <a href="{{ block.settings.link }}">
+        {% endif %}
+        {% if block.settings.logo_image != blank %}
+          <img
+            src="{{ block.settings.logo_image | img_url : 'master' }}"
+            alt="{% if  block.settings.logo_image.alt != blank %}{{ block.settings.logo_image.alt }}{% else %}{{ block.settings.link.title }}{% endif %}"
+          >
+        {% endif %}
+        {% if block.settings.link %}
+          </a>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Logo List",
+  "class": "logo_section",
+  "settings": [
+   ],
+  "blocks": [
+    {
+      "type": "logo",
+      "name": "Logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "logo_image",
+          "label": "Logo"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Logo Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Logo List"
+    }
+  ]
+}
+{% endschema %}
